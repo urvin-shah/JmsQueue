@@ -1,37 +1,36 @@
 package com.urvin.fifo;
 
+import com.amazon.sqs.javamessaging.SQSConnectionFactory;
+import com.urvin.domain.User;
+import com.urvin.fifo.queue.FifoObjectMessageQueue;
 import com.urvin.fifo.queue.FifoTextMessageQueue;
 import com.urvin.config.Config;
 
 public class FifoQueueDemo {
     public static void main(String[] args) {
         FifoQueueDemo fifoQueue = new FifoQueueDemo();
-        fifoQueue.elasticMQ();
-//        fifoQueue.sqsMQ();
+        Config config = new Config();
+//        fifoQueue.textMessage(config.getEQConnectionFactory());
+//        fifoQueue.objectMessage(config.getEQConnectionFactory());
+//        fifoQueue.textMessage(config.getSQSConnectionFactory());
+        fifoQueue.objectMessage(config.getSQSConnectionFactory());
     }
 
-    private void elasticMQ() {
-        Config config = new Config();
-        FifoTextMessageQueue queue = new FifoTextMessageQueue("TextMessageQueue",config.getEQConnectionFactory());
+    private void textMessage(SQSConnectionFactory connectionFactory) {
+        FifoTextMessageQueue queue = new FifoTextMessageQueue("TextMessageQueue.fifo",connectionFactory);
         queue.sendTextMessage("This is Fifo Elastic MQ test message");
         queue.sendTextMessage("This is Fifo Elastic MQ test message1");
         queue.sendTextMessage("This is Fifo Elastic MQ test message2");
         queue.sendTextMessage("This is Fifo Elastic MQ test message3");
         queue.sendTextMessage("This is Fifo Elastic MQ test message4");
         queue.sendTextMessage("This is Fifo Elastic MQ test message5");
-
-
-
     }
 
-    private void sqsMQ() {
-        Config config = new Config();
-        FifoTextMessageQueue queue = new FifoTextMessageQueue("TextMessageQueue.fifo",config.getSQSConnectionFactory());
-        queue.sendTextMessage("This is Fifo Queue Test message 1");
-        queue.sendTextMessage("This is Fifo Queue Test message 2");
-        queue.sendTextMessage("This is Fifo Queue Test message 3");
-        queue.sendTextMessage("This is Fifo Queue Test message 4");
-        queue.sendTextMessage("This is Fifo Queue Test message 5");
-        queue.sendTextMessage("This is Fifo Queue Test message 6");
+    private void objectMessage(SQSConnectionFactory connectionFactory) {
+        FifoObjectMessageQueue queue = new FifoObjectMessageQueue("ObjnectMessageQueue.fifo",connectionFactory);
+        queue.sendMessage(new User("Urvin","urvin@gmail.com","9756568888"));
+        queue.sendMessage(new User("Vivek","vivek@gmail.com","97689787897"));
+        queue.sendMessage(new User("Riyal","riyal@gmail.com","94567807"));
+        queue.sendMessage(new User("Harshal","harshal@gmail.com","990889088"));
     }
 }
