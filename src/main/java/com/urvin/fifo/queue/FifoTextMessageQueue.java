@@ -11,7 +11,7 @@ public class FifoTextMessageQueue extends FifoQueue implements MessageListener {
     public FifoTextMessageQueue(String queueName, SQSConnectionFactory connectionFactory) {
         super(queueName,connectionFactory);
         try {
-            ensureQueueExists(getConnection(), this.getQueueName());
+            ensureQueueExists(getConnection(), queueName);
         }catch(Exception e) {
             e.printStackTrace();
         }
@@ -57,6 +57,7 @@ public class FifoTextMessageQueue extends FifoQueue implements MessageListener {
         try {
             // Cast the received message as TextMessage and print the text to screen.
             System.out.println("Received: " + ((TextMessage) message).getText());
+
         } catch (JMSException e) {
             e.printStackTrace();
         }

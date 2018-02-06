@@ -12,12 +12,12 @@ public class FifoQueueDemo {
         Config config = new Config();
 //        fifoQueue.textMessage(config.getEQConnectionFactory());
 //        fifoQueue.objectMessage(config.getEQConnectionFactory());
-//        fifoQueue.textMessage(config.getSQSConnectionFactory());
+        fifoQueue.textMessage(config.getSQSConnectionFactory());
         fifoQueue.objectMessage(config.getSQSConnectionFactory());
     }
 
     private void textMessage(SQSConnectionFactory connectionFactory) {
-        FifoTextMessageQueue queue = new FifoTextMessageQueue("TextMessageQueue.fifo",connectionFactory);
+        FifoTextMessageQueue queue = new FifoTextMessageQueue("TextMessageQueue",connectionFactory);
         queue.sendTextMessage("This is Fifo Elastic MQ test message");
         queue.sendTextMessage("This is Fifo Elastic MQ test message1");
         queue.sendTextMessage("This is Fifo Elastic MQ test message2");
@@ -27,7 +27,7 @@ public class FifoQueueDemo {
     }
 
     private void objectMessage(SQSConnectionFactory connectionFactory) {
-        FifoObjectMessageQueue queue = new FifoObjectMessageQueue("ObjnectMessageQueue.fifo",connectionFactory);
+        FifoObjectMessageQueue queue = new FifoObjectMessageQueue("ObjectMessageQueue",connectionFactory);
         queue.sendMessage(new User("Urvin","urvin@gmail.com","9756568888"));
         queue.sendMessage(new User("Vivek","vivek@gmail.com","97689787897"));
         queue.sendMessage(new User("Riyal","riyal@gmail.com","94567807"));

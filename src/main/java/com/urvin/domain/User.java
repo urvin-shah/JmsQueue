@@ -5,6 +5,8 @@ public class User implements Message {
     private String email;
     private String phone;
 
+    public User(){super();}
+
     public User(String username, String email, String phone) {
         this.username = username;
         this.email = email;
@@ -33,6 +35,15 @@ public class User implements Message {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }
 

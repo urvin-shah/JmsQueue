@@ -13,11 +13,11 @@ public class FifoObjectMessageQueue extends FifoQueue implements MessageListener
 
     public FifoObjectMessageQueue(String queueName, SQSConnectionFactory connectionFactory) {
         super(queueName,connectionFactory);
-        try {
-            ensureQueueExists(getConnection(), this.getQueueName());
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ensureQueueExists(getConnection(), queueName);
+//        }catch(Exception e) {
+//            e.printStackTrace();
+//        }
         receiveMessageAsync();
     }
 
@@ -38,7 +38,9 @@ public class FifoObjectMessageQueue extends FifoQueue implements MessageListener
 
     public void receiveMessageAsync() {
         try {
+            System.out.println("The Queue name is:-"+this.getQueueName());
             SQSConnection connection = this.getConnection();
+            ensureQueueExists(getConnection(), this.getQueueName());
             // Create the session
             Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
             MessageConsumer consumer = session.createConsumer( session.createQueue( this.getQueueName() ) );
