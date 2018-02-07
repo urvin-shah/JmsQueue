@@ -43,4 +43,25 @@ public class Config {
         System.out.println("Value of connection type :"+connectionType);
         return (SQSConnectionFactory) context.getBean(connectionType);
     }
+
+    @Bean(value = "jms")
+    public AmazonSQSClient getAmazonSQSClient() {
+        System.out.println("Value of connection type :"+connectionType);
+        return (AmazonSQSClient) context.getBean(connectionType);
+    }
+
+    @Bean(value = "elasticMQ")
+    public AmazonSQSClient getEQAmazonSQSClient() {
+        AmazonSQSClient amazonSQSClient = new AmazonSQSClient(new BasicAWSCredentials("x","x"));
+        String endPoint = "http://localhost:9324";
+        amazonSQSClient.setEndpoint(endPoint);
+        return amazonSQSClient;
+    }
+
+    @Bean(value = "sqsMQ")
+    public AmazonSQSClient getSQSAmazonClient() {
+        AmazonSQSClient amazonSQSClient = new AmazonSQSClient(new ProfileCredentialsProvider());
+        amazonSQSClient.configureRegion(Regions.US_EAST_1);
+        return amazonSQSClient;
+    }
 }

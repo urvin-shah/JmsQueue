@@ -1,8 +1,10 @@
 package com.urvin.fifo.queue;
 
 import com.amazon.sqs.javamessaging.AmazonSQSMessagingClientWrapper;
+import com.amazon.sqs.javamessaging.ProviderConfiguration;
 import com.amazon.sqs.javamessaging.SQSConnection;
 import com.amazon.sqs.javamessaging.SQSConnectionFactory;
+import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.CreateQueueRequest;
 
 import javax.jms.JMSException;
@@ -13,11 +15,12 @@ public class FifoQueue {
     private SQSConnectionFactory connectionFactory;
     private String queueName;
     private String queueUrl;
+    private AmazonSQSClient amazonSQSClient;
 
-
-    public FifoQueue(String queueName,SQSConnectionFactory connectionFactory) {
+    public FifoQueue(String queueName,AmazonSQSClient amazonSQSClient) {
         this.queueName = queueName;
-        this.connectionFactory = connectionFactory;
+        this.amazonSQSClient = amazonSQSClient;
+        this.connectionFactory = new SQSConnectionFactory(new ProviderConfiguration(),amazonSQSClient);
     }
 
     public SQSConnection getConnection() throws JMSException {
@@ -37,5 +40,9 @@ public class FifoQueue {
     }
     public String getQueueName() {
         return this.queueName;
+    }
+
+    public AmazonSQSClient getAmazonSQSClient() {
+        return this.amazonSQSClient;
     }
 }

@@ -3,6 +3,7 @@ package com.urvin.fifo.queue;
 import com.amazon.sqs.javamessaging.SQSConnection;
 import com.amazon.sqs.javamessaging.SQSConnectionFactory;
 import com.amazon.sqs.javamessaging.message.SQSObjectMessage;
+import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.urvin.domain.User;
 
 import javax.jms.*;
@@ -11,8 +12,8 @@ import javax.jms.*;
 public class FifoObjectMessageQueue extends FifoQueue implements MessageListener{
     public static int messageGroupID = 1;
 
-    public FifoObjectMessageQueue(String queueName, SQSConnectionFactory connectionFactory) {
-        super(queueName,connectionFactory);
+    public FifoObjectMessageQueue(String queueName, AmazonSQSClient amazonSQSClient) {
+        super(queueName,amazonSQSClient);
 //        try {
 //            ensureQueueExists(getConnection(), queueName);
 //        }catch(Exception e) {

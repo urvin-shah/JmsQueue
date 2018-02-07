@@ -24,20 +24,24 @@ public class ElasticQueueController {
     @Value("${elastic.queue.object}")
     private String objectQueueName;
 
+//    @Autowired
+//    @Qualifier("elasticMQ")
+//    SQSConnectionFactory connectionFactory;
+
     @Autowired
-    @Qualifier("elasticMQ")
-    SQSConnectionFactory connectionFactory;
+    @Qualifier("jms")
+    AmazonSQSClient amazonSQSClient;
 
     private FifoObjectMessageQueue objectMessageQueue;
     private FifoTextMessageQueue textMessageQueue;
 
-//    @PostConstruct
-//    public void init() {
-//        System.out.println("Text Queue name:"+textQueueName);
-//        System.out.println("Object Queue name:"+objectQueueName);
-//        textMessageQueue = new FifoTextMessageQueue(textQueueName,connectionFactory);
-//        objectMessageQueue = new FifoObjectMessageQueue(objectQueueName,connectionFactory);
-//    }
+    @PostConstruct
+    public void init() {
+        System.out.println("Text Queue name:"+textQueueName);
+        System.out.println("Object Queue name:"+objectQueueName);
+        textMessageQueue = new FifoTextMessageQueue(textQueueName,amazonSQSClient);
+        objectMessageQueue = new FifoObjectMessageQueue(objectQueueName,amazonSQSClient);
+    }
 
     @PostMapping("/objectMessage")
     public boolean sendMessage(@RequestBody User user){

@@ -1,6 +1,7 @@
 package com.urvin.controller;
 
 import com.amazon.sqs.javamessaging.SQSConnectionFactory;
+import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.urvin.domain.User;
 import com.urvin.fifo.queue.FifoObjectMessageQueue;
 import com.urvin.fifo.queue.FifoTextMessageQueue;
@@ -16,9 +17,13 @@ import javax.validation.Valid;
 @RequestMapping("/sqs")
 public class SQSQueueController {
 
+//    @Autowired
+//    @Qualifier("jms")
+//    SQSConnectionFactory connectionFactory;
+
     @Autowired
     @Qualifier("jms")
-    SQSConnectionFactory connectionFactory;
+    AmazonSQSClient amazonSQSClient;
 
     @Value("${sqs.queue.text}")
     private String textQueueName;
@@ -33,8 +38,8 @@ public class SQSQueueController {
     public void init(){
         System.out.println("Text Message queue:"+textQueueName);
         System.out.println("Object message Queue name :"+objectQueueName);
-        textMessageQueue = new FifoTextMessageQueue(textQueueName,connectionFactory);
-        objectMessageQueue = new FifoObjectMessageQueue(objectQueueName,connectionFactory);
+        textMessageQueue = new FifoTextMessageQueue(textQueueName,amazonSQSClient);
+        objectMessageQueue = new FifoObjectMessageQueue(objectQueueName,amazonSQSClient);
     }
 
     @PostMapping("/textMessage")

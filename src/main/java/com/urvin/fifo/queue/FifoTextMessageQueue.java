@@ -2,14 +2,16 @@ package com.urvin.fifo.queue;
 
 import com.amazon.sqs.javamessaging.SQSConnection;
 import com.amazon.sqs.javamessaging.SQSConnectionFactory;
+import com.amazon.sqs.javamessaging.message.SQSMessage;
+import com.amazonaws.services.sqs.AmazonSQSClient;
 
 import javax.jms.*;
 
 public class FifoTextMessageQueue extends FifoQueue implements MessageListener {
 
     public static int messageGroupID = 1;
-    public FifoTextMessageQueue(String queueName, SQSConnectionFactory connectionFactory) {
-        super(queueName,connectionFactory);
+    public FifoTextMessageQueue(String queueName, AmazonSQSClient amazonSQSClient) {
+        super(queueName,amazonSQSClient);
         try {
             ensureQueueExists(getConnection(), queueName);
         }catch(Exception e) {
@@ -57,7 +59,9 @@ public class FifoTextMessageQueue extends FifoQueue implements MessageListener {
         try {
             // Cast the received message as TextMessage and print the text to screen.
             System.out.println("Received: " + ((TextMessage) message).getText());
-
+            System.out.println("Message Queue Url:"+((SQSMessage)message).getQueueUrl());
+            System.out.println("Recepient handle:"+((SQSMessage)message).getReceiptHandle());
+            this.getAmazonSQSClient().deleteMessage(((SQSMessage)message).getQueueUrl(),((SQSMessage)message).getReceiptHandle());
         } catch (JMSException e) {
             e.printStackTrace();
         }
